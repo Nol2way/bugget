@@ -5,3 +5,4 @@ export default defineConfig({
   base: '/bugget/',
   plugins: [react()],
 })
+
