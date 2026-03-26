@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Lock</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Bungee&family=Playfair+Display:wght@400;700&family=Sarabun:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Sarabun', 'Segoe UI', sans-serif;
+      background-color: #fdeef3;
+      background-image:
+        radial-gradient(circle at 10% 15%, rgba(255,179,198,0.4) 0%, transparent 40%),
+        radial-gradient(circle at 88% 80%, rgba(255,179,198,0.35) 0%, transparent 40%),
+        radial-gradient(circle at 55% 50%, rgba(255,220,230,0.2) 0%, transparent 60%);
+    }
+
+    /* floating petals */
+    .petal {
+      position: fixed;
+      font-size: 22px;
+      opacity: 0.18;
+      pointer-events: none;
+      animation: drift linear infinite;
+    }
+    @keyframes drift {
+      0%   { transform: translateY(-40px) rotate(0deg); opacity: 0; }
+      10%  { opacity: 0.18; }
+      90%  { opacity: 0.18; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* --- Two-column wrapper --- */
+    .page-wrapper {
+      display: flex;
+      align-items: center;
+      gap: clamp(20px, 3vw, 48px);
+      padding: 16px;
+      max-height: 100vh;
+    }
+
+    /* --- Left: photo side --- */
+    .photo-side {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      max-height: 100vh;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(18px);
+      border-radius: 28px;
+      padding: clamp(16px, 2.5vh, 32px) clamp(16px, 2vw, 28px);
+      width: clamp(260px, 28vw, 320px);
+      text-align: center;
+      box-shadow:
+        0 6px 32px rgba(210, 100, 140, 0.18),
+        0 1px 8px rgba(0,0,0,0.06);
+      border: 1.5px solid rgba(255, 182, 200, 0.55);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* corner flower deco */
+    .card::before {
+      content: '🌸';
+      position: absolute;
+      top: -8px; left: -8px;
+      font-size: 60px;
+      opacity: 0.12;
+      transform: rotate(-25deg);
+      pointer-events: none;
+    }
+    .card::after {
+      content: '🌸';
+      position: absolute;
+      bottom: -8px; right: -8px;
+      font-size: 60px;
+      opacity: 0.12;
+      transform: rotate(20deg);
+      pointer-events: none;
+    }
+
+    .bow { font-size: clamp(28px, 4vh, 48px); margin-bottom: 2px; line-height: 1; }
+
+    h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(20px, 2.8vh, 30px);
+      font-weight: 700;
+      color: #c44070;
+      letter-spacing: 1px;
+      margin-bottom: 2px;
+    }
+
+    /* Bungee display class */
+    .bungee-regular {
+      font-family: 'Bungee', cursive;
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    /* Balsamiq Sans utility classes */
+    .balsamiq-sans-regular {
+      font-family: 'Balsamiq Sans', sans-serif;
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    .balsamiq-sans-bold {
+      font-family: 'Balsamiq Sans', sans-serif;
+      font-weight: 700;
+      font-style: normal;
+    }
+
+    .balsamiq-sans-regular-italic {
+      font-family: 'Balsamiq Sans', sans-serif;
+      font-weight: 400;
+      font-style: italic;
+    }
+
+    .balsamiq-sans-bold-italic {
+      font-family: 'Balsamiq Sans', sans-serif;
+      font-weight: 700;
+      font-style: italic;
+    }
+
+    .subtitle {
+      font-size: 12px;
+      color: #b07888;
+      margin-bottom: clamp(10px, 1.5vh, 20px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    /* --- PIN bar (dark like the image) --- */
+    .pin-bar {
+      background: #2c2444;
+      border-radius: 12px;
+      padding: clamp(8px, 1.2vh, 13px) 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: clamp(10px, 1.5vh, 18px);
+      min-height: 44px;
+    }
+
+    .pin-bar .pin-cell {
+      color: #fff;
+      font-size: 22px;
+      font-family: 'Playfair Display', serif;
+      min-width: 18px;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+
+    .pin-bar .pin-cell.empty-dot::after {
+      content: '•';
+      color: rgba(255,255,255,0.3);
+      font-size: 28px;
+      line-height: 0;
+      vertical-align: middle;
+    }
+
+    /* --- Keypad --- */
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(6px, 1vh, 10px);
+    }
+
+    .key {
+      background: #fff;
+      border: 1.5px solid rgba(220, 160, 180, 0.35);
+      border-radius: 14px;
+      color: #3a2535;
+      font-size: clamp(16px, 2.2vh, 22px);
+      font-family: 'Playfair Display', serif;
+      padding: clamp(8px, 1.3vh, 14px) 0;
+      cursor: pointer;
+      user-select: none;
+      box-shadow: 0 3px 8px rgba(200, 100, 140, 0.1);
+      transition: background 0.12s, transform 0.1s, box-shadow 0.12s;
+    }
+
+    .key:hover  { background: #fff0f5; border-color: #e8a0b8; }
+    .key:active { background: #f5cedd; transform: scale(0.91); box-shadow: none; }
+
+    .key.del {
+      font-size: 18px;
+      color: #b07888;
+      font-family: 'Sarabun', sans-serif;
+    }
+
+    .key.empty {
+      background: transparent;
+      border-color: transparent;
+      box-shadow: none;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    /* --- Message --- */
+    .msg {
+      font-size: 13px;
+      min-height: 20px;
+      margin-top: 14px;
+      color: #c44070;
+      font-weight: 500;
+    }
+
+    /* --- Polaroid photo --- */
+    .polaroid {
+      background: #fff;
+      padding: 10px 10px 28px;
+      border-radius: 4px;
+      box-shadow: 3px 5px 18px rgba(180,80,120,0.18), 0 1px 4px rgba(0,0,0,0.1);
+      transform: rotate(-3deg);
+      transition: transform 0.3s;
+      position: relative;
+      width: clamp(240px, 32vw, 380px);
+    }
+
+    .polaroid:hover { transform: rotate(0deg) scale(1.04); }
+
+    .polaroid img {
+      width: 100%;
+      height: clamp(220px, 55vh, 460px);
+      object-fit: cover;
+      border-radius: 2px;
+      display: block;
+    }
+
+    /* placeholder shown when no photo */
+    .polaroid .no-photo {
+      width: 100%;
+      height: clamp(220px, 55vh, 460px);
+      background: linear-gradient(135deg, #ffd6e7 0%, #ffb3cb 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 52px;
+      border-radius: 2px;
+    }
+
+    .polaroid .caption {
+      font-family: 'Sarabun', cursive;
+      font-size: 13px;
+      color: #b07888;
+      text-align: center;
+      padding-top: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    /* sticker on polaroid */
+    .polaroid .sticker {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      font-size: 22px;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.15));
+    }
+
+    /* upload label */
+    .upload-label {
+      display: inline-block;
+      font-size: 11px;
+      color: #d4849e;
+      cursor: pointer;
+      text-decoration: underline dotted;
+      user-select: none;
+    }
+    .upload-label:hover { color: #c44070; }
+    #photoInput { display: none; }
+
+    /* responsive: stack on small screens */
+    @media (max-width: 680px) {
+      .page-wrapper { flex-direction: column; gap: 24px; }
+      .polaroid { width: 220px; }
+      .polaroid img, .polaroid .no-photo { height: 200px; }
+    }
+
+    /* --- Shake --- */
+    .shake { animation: shake 0.4s ease; }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%     { transform: translateX(-8px); }
+      40%     { transform: translateX(8px); }
+      60%     { transform: translateX(-6px); }
+      80%     { transform: translateX(6px); }
+    }
+  </style>
+</head>
+<body>
+  <!-- floating petals bg -->
+  <span class="petal" style="left:8%;animation-duration:9s;animation-delay:0s;">🌸</span>
+  <span class="petal" style="left:22%;animation-duration:12s;animation-delay:2s;">🌺</span>
+  <span class="petal" style="left:50%;animation-duration:10s;animation-delay:4s;">🌸</span>
+  <span class="petal" style="left:74%;animation-duration:13s;animation-delay:1s;">💮</span>
+  <span class="petal" style="left:90%;animation-duration:8s;animation-delay:3s;">🌸</span>
+
+  <div class="page-wrapper">
+
+    <!-- LEFT: polaroid photo -->
+    <div class="photo-side">
+      <div class="polaroid" id="polaroid">
+        <span class="sticker">💕</span>
+        <img id="photoImg" src="IMG_9187.png" alt="our photo"
+             onerror="this.style.display='none';document.getElementById('noPhoto').style.display='flex'" />
+        <div class="no-photo" id="noPhoto" style="display:none;">📷</div>
+        <div class="caption bungee-regular" style="color:#c44070; text-align:center; font-size:18px;">Forget rak phi John 💗</div>
+      </div>
+      <input type="file" id="photoInput" accept="image/*" onchange="changePhoto(event)" />
+    </div>
+
+    <!-- RIGHT: lock card -->
+    <div class="card" id="card">
+    <div class="bow">🎀</div>
+    <h1 class="bungee-regular">My Lock</h1>
+    <p class="subtitle">🔒 Anniversary Code?</p>
+
+    <!-- PIN display bar -->
+    <div class="pin-bar" id="pinBar"></div>
+
+    <!-- Numpad -->
+    <div class="keypad">
+      <button class="key" onclick="pressKey('1')">1</button>
+      <button class="key" onclick="pressKey('2')">2</button>
+      <button class="key" onclick="pressKey('3')">3</button>
+      <button class="key" onclick="pressKey('4')">4</button>
+      <button class="key" onclick="pressKey('5')">5</button>
+      <button class="key" onclick="pressKey('6')">6</button>
+      <button class="key" onclick="pressKey('7')">7</button>
+      <button class="key" onclick="pressKey('8')">8</button>
+      <button class="key" onclick="pressKey('9')">9</button>
+      <button class="key empty"></button>
+      <button class="key" onclick="pressKey('0')">0</button>
+      <button class="key del" onclick="deleteLast()">⌫</button>
+    </div>
+
+    <div class="msg" id="msg"></div>
+    </div><!-- end .card -->
+  </div><!-- end .page-wrapper -->
+
+  <script>
+    // ---- ตั้งรหัสที่ถูกต้องที่นี่ ----
+    const CORRECT_CODE = '030369';
+    const PIN_LENGTH = CORRECT_CODE.length;
+    // ----------------------------------
+
+    let pin = '';
+    let locked = false;
+
+    function renderBar() {
+      const bar = document.getElementById('pinBar');
+      bar.innerHTML = '';
+      for (let i = 0; i < PIN_LENGTH; i++) {
+        const cell = document.createElement('span');
+        cell.className = 'pin-cell';
+        if (i < pin.length) {
+          // show first typed digit, mask the rest with *
+          cell.textContent = i === 0 ? pin[0] : '*';
+        } else {
+          cell.classList.add('empty-dot');
+        }
+        bar.appendChild(cell);
+      }
+    }
+
+    function pressKey(digit) {
+      if (locked || pin.length >= PIN_LENGTH) return;
+      pin += digit;
+      renderBar();
+      document.getElementById('msg').textContent = '';
+      if (pin.length === PIN_LENGTH) setTimeout(confirmPin, 300);
+    }
+
+    function deleteLast() {
+      if (locked) return;
+      pin = pin.slice(0, -1);
+      renderBar();
+      document.getElementById('msg').textContent = '';
+    }
+
+    function confirmPin() {
+      if (pin.length === 0) return;
+      const msg  = document.getElementById('msg');
+      const card = document.getElementById('card');
+
+      if (pin === CORRECT_CODE) {
+        locked = true;
+        msg.style.color = '#c44070';
+        msg.textContent = '💗 ถูกต้องแล้ว กำลังเข้าสู่ระบบ...';
+        setTimeout(() => { window.location.href = 'index.html'; }, 1200);
+      } else {
+        msg.style.color = '#c44070';
+        msg.textContent = '💔 รหัสไม่ถูกต้อง ลองใหม่นะ';
+        card.classList.remove('shake');
+        void card.offsetWidth;
+        card.classList.add('shake');
+        pin = '';
+        renderBar();
+      }
+    }
+
+    function changePhoto(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const img = document.getElementById('photoImg');
+        const noPhoto = document.getElementById('noPhoto');
+        img.src = ev.target.result;
+        img.style.display = 'block';
+        noPhoto.style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key >= '0' && e.key <= '9') pressKey(e.key);
+      else if (e.key === 'Backspace') deleteLast();
+      else if (e.key === 'Enter') confirmPin();
+    });
+
+    renderBar();
+  </script>
+</body>
+</html>
