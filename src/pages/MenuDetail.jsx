@@ -266,7 +266,7 @@ export default function MenuDetail({ data, onClose }) {
           <div className="mem-row">
             {localData.items.map((m, i) => (
               <div key={m.id} className="mem-card" style={{ '--rot': `${(i % 3 - 1) * 3}deg` }}>
-                <div className="mem-card-img" style={{ backgroundImage: `url(${m.img || '/IMG_9187.png'})` }} />
+                <div className="mem-card-img" style={{ backgroundImage: `url(${m.img || import.meta.env.BASE_URL + 'IMG_9187.png'})` }} />
                 <div className="mem-card-footer">
                   <span className="mem-card-date">{m.date}</span>
                   <span className="mem-card-text">{m.text}</span>
@@ -290,7 +290,7 @@ export default function MenuDetail({ data, onClose }) {
         <button className="detail-close" onClick={onClose}>✕</button>
         <div className={`detail-header calendar-header ${data.id === 'calendar' ? 'calendar-centered' : ''}`}>
           <div className="calendar-hero">
-            <img src={localData.heroImg || '/IMG_9187.png'} alt={data.title} />
+            <img src={localData.heroImg || import.meta.env.BASE_URL + 'IMG_9187.png'} alt={data.title} />
             <button className="play-overlay" aria-label="Play">▶</button>
           </div>
           <div className="calendar-info">

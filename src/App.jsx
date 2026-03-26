@@ -19,7 +19,7 @@ export default function App() {
   const [locked, setLocked] = useState(false)
   const [msg, setMsg] = useState('')
   const [shaking, setShaking] = useState(false)
-  const [images, setImages] = useState(['/IMG_9187.png'])
+  const [images, setImages] = useState([import.meta.env.BASE_URL + 'IMG_9187.png'])
   const [current, setCurrent] = useState(0)
   const [autoplay, setAutoplay] = useState(false)
 

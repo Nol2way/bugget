@@ -1,3 +1,5 @@
+const BASE = import.meta.env.BASE_URL
+
 const MENU_DATA = {
   memories: {
     id: 'memories',
@@ -5,9 +7,9 @@ const MENU_DATA = {
     desc: 'Every precious moment with you',
     icon: '🧸',
     items: [
-      { id: 'm1', date: '2023-04-12', text: 'First date at the riverside', img: '/IMG_9187.png' },
-      { id: 'm2', date: '2024-02-14', text: 'Valentine picnic', img: '/IMG_9187.png' },
-      { id: 'm3', date: '2026-03-27', text: 'Our special clip', img: '/IMG_9187.png' },
+      { id: 'm1', date: '2023-04-12', text: 'First date at the riverside', img: BASE + 'IMG_9187.png' },
+      { id: 'm2', date: '2024-02-14', text: 'Valentine picnic', img: BASE + 'IMG_9187.png' },
+      { id: 'm3', date: '2026-03-27', text: 'Our special clip', img: BASE + 'IMG_9187.png' },
     ],
   },
   calendar: {
@@ -15,7 +17,7 @@ const MENU_DATA = {
     title: 'Love Calendar',
     desc: 'Counting days of our love story',
     start: '2026-03-03',
-    heroImg: '/IMG_9187.png'
+    heroImg: BASE + 'IMG_9187.png'
   },
   puzzle: {
     id: 'puzzle',
