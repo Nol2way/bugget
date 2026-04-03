@@ -11,20 +11,6 @@ const MENU_ITEMS = [
     heart: '❤️',
   },
   {
-    id: 'calendar',
-    title: 'Love Calendar',
-    desc: 'Counting days of our love story',
-    icon: '🎁',
-    heart: '❤️',
-  },
-  {
-    id: 'puzzle',
-    title: 'Love Puzzle',
-    desc: 'A puzzle made just for two',
-    icon: '🪷',
-    heart: '💕',
-  },
-  {
     id: 'notes',
     title: 'Love Notes',
     desc: 'Sweet words just for you',

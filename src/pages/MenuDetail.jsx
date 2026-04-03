@@ -88,10 +88,6 @@ function PuzzleGame({ data, onClose }) {
         <div className="puz-header">
           <div className="puz-header-left">
             <span className="puz-icon">🧩</span>
-            <div>
-              <h2 className="puz-title">Love Puzzle</h2>
-              <p className="puz-sub">จับคู่ภาพให้ครบทุกคู่ 💗</p>
-            </div>
           </div>
           <div className="puz-score">
             <span className="puz-score-num">{moves}</span>
@@ -213,6 +209,7 @@ export default function MenuDetail({ data, onClose }) {
 
   const [localData, setLocalData] = useState(() => ({ ...data, items: data.items ? [...data.items] : [] }))
   const [count, setCount] = useState(() => computeCountdown(data.start || Date.now()))
+  const [fullImage, setFullImage] = useState(null) // { img, date, text }
 
   useEffect(() => {
     if (!data.start) return undefined
@@ -243,7 +240,7 @@ export default function MenuDetail({ data, onClose }) {
   /* ── Memories layout ── */
   if (data.id === 'memories') {
     return (
-      <div className="detail-overlay" onClick={onClose}>
+      <div className={`detail-overlay ${fullImage ? 'lightbox-open' : ''}`} onClick={onClose}>
         <div className="mem-page" onClick={(e) => e.stopPropagation()}>
           <button className="detail-close mem-close" onClick={onClose}>✕</button>
 
@@ -264,9 +261,14 @@ export default function MenuDetail({ data, onClose }) {
 
           {/* Photo row */}
           <div className="mem-row">
-            {localData.items.map((m, i) => (
-              <div key={m.id} className="mem-card" style={{ '--rot': `${(i % 3 - 1) * 3}deg` }}>
-                <div className="mem-card-img" style={{ backgroundImage: `url(${m.img || import.meta.env.BASE_URL + 'IMG_9187.png'})` }} />
+            {localData.items.map((m) => (
+              <div key={m.id} className="mem-card">
+                <img
+                  className="mem-card-img"
+                  src={m.img || import.meta.env.BASE_URL + 'IMG_9187.png'}
+                  alt="memory"
+                  onClick={() => setFullImage({ img: m.img || import.meta.env.BASE_URL + 'IMG_9187.png', date: m.date, text: m.text })}
+                />
                 <div className="mem-card-footer">
                   <span className="mem-card-date">{m.date}</span>
                   <span className="mem-card-text">{m.text}</span>
@@ -279,57 +281,21 @@ export default function MenuDetail({ data, onClose }) {
             )}
           </div>
         </div>
+        {fullImage && (
+          <div className="mem-lightbox" onClick={() => setFullImage(null)}>
+            <div className="mem-lightbox-polaroid" onClick={(e) => e.stopPropagation()}>
+              <button className="mem-lightbox-close" onClick={() => setFullImage(null)}>✕</button>
+              <span className="mem-lightbox-sticker">💕</span>
+              <img src={fullImage.img} alt="memory" />
+              <div className="mem-lightbox-caption">
+                <span className="mem-lightbox-date">{fullImage.date}</span>
+                {fullImage.text && <span className="mem-lightbox-text">{fullImage.text}</span>}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     )
   }
 
-  /* ── Calendar / other layouts ── */
-  return (
-    <div className="detail-overlay" onClick={onClose}>
-      <div className="detail-card" onClick={(e) => e.stopPropagation()}>
-        <button className="detail-close" onClick={onClose}>✕</button>
-        <div className={`detail-header calendar-header ${data.id === 'calendar' ? 'calendar-centered' : ''}`}>
-          <div className="calendar-hero">
-            <img src={localData.heroImg || import.meta.env.BASE_URL + 'IMG_9187.png'} alt={data.title} />
-            <button className="play-overlay" aria-label="Play">▶</button>
-          </div>
-          <div className="calendar-info">
-            <h2 className="detail-title">{data.title}</h2>
-            <p className="detail-desc">{data.desc}</p>
-          </div>
-        </div>
-
-        <div className="detail-body calendar-body">
-          {data.id === 'calendar' ? (
-            <div className="countdown-grid">
-              <div className="count-cell"><div className="count-num">{String(count.years).padStart(2,'0')}</div><div className="count-label">Year</div></div>
-              <div className="count-cell"><div className="count-num">{String(count.months).padStart(2,'0')}</div><div className="count-label">Month</div></div>
-              <div className="count-cell"><div className="count-num">{String(count.days).padStart(2,'0')}</div><div className="count-label">Days</div></div>
-              <div className="count-cell"><div className="count-num">{String(count.hours).padStart(2,'0')}</div><div className="count-label">Hours</div></div>
-              <div className="count-cell"><div className="count-num">{String(count.minutes).padStart(2,'0')}</div><div className="count-label">Minutes</div></div>
-              <div className="count-cell"><div className="count-num">{String(count.seconds).padStart(2,'0')}</div><div className="count-label">Seconds</div></div>
-            </div>
-          ) : (
-            <>
-              {localData.items && (
-                <div className="mem-gallery">
-                  {localData.items.map((m) => (
-                    <div key={m.id} className="mem-item">
-                      {m.img && <img src={m.img} alt={m.text} />}
-                      <div className="mem-meta"><strong>{m.date}</strong> — {m.text}</div>
-                    </div>
-                  ))}
-                </div>
-              )}
-              {data.notes && (
-                <ul className="notes-list">
-                  {data.notes.map((n) => <li key={n.id}>{n.text}</li>)}
-                </ul>
-              )}
-            </>
-          )}
-        </div>
-      </div>
-    </div>
-  )
 }

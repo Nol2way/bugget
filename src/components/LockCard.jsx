@@ -2,7 +2,7 @@ import React from 'react'
 import PinBar from './PinBar'
 import Keypad from './Keypad'
 
-export default function LockCard({ pinLength, pin, onPress, onDelete, msg, shaking }) {
+export default function LockCard({ pinLength, pin, onPress, onDelete, onClear, msg, shaking }) {
   return (
     <div className={`card${shaking ? ' shake' : ''}`}>
       <div className="bow">🎀</div>
@@ -11,9 +11,10 @@ export default function LockCard({ pinLength, pin, onPress, onDelete, msg, shaki
 
       <PinBar length={pinLength} pin={pin} />
 
-      <Keypad onPress={onPress} onDelete={onDelete} />
+      <Keypad onPress={onPress} onDelete={onDelete} onClear={onClear} />
 
       <div className="msg">{msg}</div>
+      <div className="corner-flower">🌸</div>
     </div>
   )
 }

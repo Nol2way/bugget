@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Polaroid from './components/Polaroid'
 import LockCard from './components/LockCard'
 import MenuPage from './pages/MenuPage'
+import SongPage from './pages/SongPage'
 import './styles.css'
 
 const CORRECT_CODE = '030369'
@@ -17,6 +18,7 @@ const PETALS = [
 export default function App() {
   const [pin, setPin] = useState('')
   const [locked, setLocked] = useState(false)
+  const [phase, setPhase] = useState('lock') // 'lock' | 'song' | 'menu'
   const [msg, setMsg] = useState('')
   const [shaking, setShaking] = useState(false)
   const [images, setImages] = useState([import.meta.env.BASE_URL + 'IMG_9187.png'])
@@ -52,12 +54,18 @@ export default function App() {
     setMsg('')
   }
 
+  function handleClear() {
+    if (locked) return
+    setPin('')
+    setMsg('')
+  }
+
   function confirmPin(value) {
     const v = value ?? pin
     if (!v) return
     if (v === CORRECT_CODE) {
       setMsg('💗 ถูกต้องแล้ว กำลังเข้าสู่ระบบ...')
-      setTimeout(() => setLocked(true), 800)
+      setTimeout(() => { setLocked(true); setPhase('song') }, 800)
     } else {
       setMsg('💔 รหัสไม่ถูกต้อง ลองใหม่นะ')
       setPin('')
@@ -96,7 +104,8 @@ export default function App() {
     return () => clearInterval(id)
   }, [autoplay, images.length])
 
-  if (locked) return <MenuPage />
+  if (phase === 'menu') return <MenuPage />
+  if (phase === 'song') return <SongPage onContinue={() => setPhase('menu')} />
 
   return (
     <div className="app-root">
@@ -120,6 +129,7 @@ export default function App() {
           pin={pin}
           onPress={handlePress}
           onDelete={handleDelete}
+          onClear={handleClear}
           msg={msg}
           shaking={shaking}
         />

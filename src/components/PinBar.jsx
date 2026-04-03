@@ -6,9 +6,7 @@ export default function PinBar({ pin, length }) {
       {Array.from({ length }).map((_, i) => {
         const filled = i < pin.length
         return (
-          <span key={i} className={`pin-cell${filled ? '' : ' empty-dot'}`}>
-            {filled ? (i === 0 ? pin[0] : '*') : ''}
-          </span>
+          <span key={i} className={`pin-cell ${filled ? 'filled' : 'empty-dot'}`}></span>
         )
       })}
     </div>
