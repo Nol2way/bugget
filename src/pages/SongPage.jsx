@@ -6,6 +6,8 @@ const PETALS = [
   { left: '55%', dur: '10s', delay: '4s',  icon: '🌸' },
   { left: '78%', dur: '13s', delay: '1s',  icon: '💮' },
   { left: '92%', dur: '8s',  delay: '3s',  icon: '🌸' },
+  {left: '15%', dur: '11s', delay: '5s',  icon: '🌼' },
+  
 ]
 
 export default function SongPage({ onContinue }) {
@@ -41,7 +43,7 @@ export default function SongPage({ onContinue }) {
           </div>
         </div>
 
-        <p className="song-title">ขอตูผล — Three Man Down</p>
+        <p className="song-title">เหตุผล — Three Man Down</p>
 
         <button className="song-continue-btn" onClick={onContinue}>
           เข้าสู่เมนู 💗

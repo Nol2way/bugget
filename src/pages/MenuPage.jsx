@@ -28,11 +28,11 @@ export default function MenuPage() {
   return (
     <div className="menu-root">
       {/* floating petals */}
-      {['🌸','🌺','🌸','💮','🌸'].map((icon, i) => (
+      {['🌸','🌺','🌸','💮','🌸','💓'].map((icon, i) => (
         <span key={i} className="petal" style={{
-          left: `${[8,22,50,74,90][i]}%`,
-          animationDuration: `${[9,12,10,13,8][i]}s`,
-          animationDelay: `${[0,2,4,1,3][i]}s`,
+          left: `${[8,22,50,74,90,15][i]}%`,
+          animationDuration: `${[9,12,10,13,8,11][i]}s`,
+          animationDelay: `${[0,2,4,1,3,5][i]}s`,
         }}>{icon}</span>
       ))}
 
